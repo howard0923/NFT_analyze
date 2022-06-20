@@ -1,0 +1,283 @@
+html{
+  height: 100%;
+}
+body{
+  margin: 0px ;
+  background-color: #121212;
+  font-family: Arial Black;
+  height: 100%;
+  /*overflow: hidden;*/
+}
+img{
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.topbar{
+  width: 100%;
+  height: 60px;
+  display: flex;
+  background-color: #1E1F25;
+  position: relative;
+}
+.page a{
+  font-size: 18px;
+  margin-left: 30px;
+  color: #767C8D;
+  text-decoration: none;
+}
+.page{
+  /*background-color: blue;*/
+  width: 300px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0px;
+  /*margin-right: 10px;*/
+  /*margin-top: 60px;*/
+}
+.page a:hover {
+    color: white;
+}
+.list{
+  /*background-color: white;*/
+  width: 100%;
+  height: 70px;
+  display: flex;
+  /*background-color: #121212;*/
+  display: flex;
+  align-items: center;  
+}
+.contact{
+  /*background-color: blue;*/
+  width: auto;
+  height: 60px;
+  text-align:center;
+  display: flex;
+   /*margin-top: 10px; */
+}
+.contact_detail{
+  /*background-color: #1E1F25;*/
+  width: 10%;
+  height: 70%;
+  margin-left: 15px;
+  margin-top: 2%;
+  display: inline-block;
+}
+.chart{
+  display: inline-block;
+  display: flex;
+}
+.whalse{
+  background-color: #121212;
+  width: 60%;
+  height: 85%;
+  display: inline-block;
+  overflow-x:  scroll;
+}
+.whalse_detail{
+  background-color: #121212;
+  width: 40%;
+  height: 680px;  
+  margin-left: 30px;
+  display: inline-block;
+}
+.bar{
+
+  background-color: #1E1F25;
+  width: 95%;
+  height: 65%;
+  overflow: hidden;
+  margin-top: 5px;
+  border-radius:10px;
+}
+.headerTab .tabLine { 
+  position:absolute; 
+  /*top:66px; */
+  height:2px; 
+  background:#35b0f2; 
+  left:0; width:100%; 
+  overflow:hidden; 
+  font-size:0; 
+  line-height:0;
+
+}
+.bar_title{
+  position: absolute;
+  right: 0px;
+  margin-right: 80px;
+  
+}
+.tooltip {
+    position: relative;
+    /*display: inline-block;*/
+    /*text-align: center;*/
+    /*border-bottom: 1px dotted black;
+    color: white;*/
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 400px;
+    height: 200px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    display: inline-block
+
+    /* 定位 */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.banner{
+  height: 100px;
+  width: 100%;
+  background-color: #121212;
+  color: #767C8D;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blinking-cursor {
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+
+.icon_detail{
+  height: 60%;
+  /* width: 100%; */
+  display: flex;
+  display:block;
+  margin:auto;
+  align-items: center;    /* ★ */
+
+}
+
+.websitesquare{
+  text-align : center;
+
+}
+
+.introbody{
+  /*background-color: blue;*/
+  width: 60%;
+  position: absolute;    
+  left: 20%;
+}
+.intro{
+  height: 400px;
+  width: 100%;
+  display: flex;
+}
+
+.intro_detail{
+  /*background-color: blue;*/
+  height: 85%;
+  width: 30%;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 5%;
+}
+
+.intro_detail h1{
+  display:inline;
+  color: white;
+  font-family: MS Sans Serif;
+}
+.intro_detail h2{
+  display:inline;
+  color: white;
+  font-family: MS Sans Serif;
+  font-weight: 200;
+}
+
+.intro_detail h4{
+  color: #FFAD00;
+  font-family: MS Sans Serif;
+  font-weight: 200;
+  line-height: 35px;
+}
+
+.intro_detail button{
+  background-color: #121212;
+  border: 1px #215277 solid;
+  color: #215277;
+  width: 40%;
+  height: 10%;
+  display: inline-block;
+  font-size: 15px;
+  /*border-radius:10px*/
+}
+
+.intro_picture{
+  /* background-color: white; */
+  height: 100%;
+  width: 60%;
+  /*display: inline-block;*/
+  /*text-align:center;*/
+}
+.intro_picture img{
+  padding:0; border:0;
+  /*width: 100%;   */
+  height: 90%;   
+  /*padding-top: 0px;*/
+  object-fit:cover;  
+}
+
+.listing_select{
+  /*background-color: white;*/
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+.foot{
+  width: 100%;
+  height: 100px;
+}
+
+.proname{
+  /* background-color: #215277; */
+  color: white;
+  display: flex;          /* ★ */
+  align-items: center;    /* ★ */
+  width: auto;
+}
+
+.iconspace{
+  width: 200px;
+}
+
+.textcenter{
+  /* text-align: center; */
+  /* width: 200px;
+  line-height: 60px; */
+
+}
+
+.logo_detail{
+  /* margin-right: 20px; */
+  border: 20px white;
+  height: 30px;
+}
+
+.bar_locate{
+  margin-top: 40px;
+  margin-left: 20px;
+}

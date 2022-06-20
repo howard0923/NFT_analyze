@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html lang="en">
+<!-- <link rel="stylesheet" href="mystyle.css"> -->
+
+<script src="https://d3js.org/d3.v6.js"></script>
+<script type="text/javascript" src="js/backend1.js"></script>
+<script src="https://d3js.org/d3.v6.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-array@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-time@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-time-format@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+<head>
+    <meta charset="utf-8">
+    <title>Data visualization final program</title>
+   
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css?v=<?=time()?20220610" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- <style>
+        svg{position: absolute;left: 15%;}
+        h1{text-align: center;}
+    </style> -->
+
+</head>
+
+<body>
+    <!-- Topbar Start -->
+    <div class="topbar">
+        <img src="icon/logo2.png">
+        <div class="page headerTab" id="headerTab">
+            <a href="intro.html">introduction</a>
+            <a href="index1.html">analysis</a>
+            <!-- <i class="tabLine"></i> -->
+        </div>
+        
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- list Start -->
+    <div class="list">
+        <div  class="contact">
+          
+            <div class="iconspace contact_detail websitesquare">
+                <div id="logo"><img src="" class="logo_detail icon_detail" title="prologo" id="prologo" style="border:2px white solid;"></div>                   
+            </div>
+            <div class="proname">
+              <span id="projectname" class="textcenter"></span>                  
+            </div>
+
+
+
+            <div class="contact_detail tooltip websitesquare">
+                <a id="website"><img src="../front end/icon/website.png" class="icon_detail" title="website"></a>
+                <!-- <span class="tooltiptext">website</span> -->
+            </div>
+            <div class="contact_detail tooltip">
+                <a id="twitter"><img src="../front end/icon/twitter.png" class="icon_detail" title="twitter"></a>       
+                <!-- <span class="tooltiptext">twitter</span>        -->
+            </div>
+            <div class="contact_detail tooltip">
+                <a id="discord"><img src="../front end/icon/discord.png" class="icon_detail" title="discord"></a>        
+                <!-- <span class="tooltiptext">discord</span>       -->
+            </div>
+            <div class="contact_detail tooltip">
+                <a id="etherscan"><img src="../front end/icon/etherscan.png" class="icon_detail" title="etherscan"></a>      
+                <!-- <span class="tooltiptext">etherscan</span>        -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- list End -->
+    <!-- chart start -->
+    <div class="chart">
+        <div class="whalse">
+            <div id="my_dataviz"></div>
+        </div>
+        <div class="whalse_detail">
+            <div class="bar" id="floorpricechart">
+              <div class="bar_title" style="color: pink;"><h2>Floor Price</h2></div>
+              <div class="bar_locate">
+                <svg id="floorpricechartsvg" width="900" height="800"></svg>
+              </div>
+              <div style="position: absolute; bottom: 450px; margin-left: 300px; color: pink;">
+                <h3>Price (USDT)</h3>
+              </div>
+            </div>
+            
+            <div class="bar" id ="bar" style="color: #F3FEE1;">
+                <div class="bar_title"><h2>Listing Count</h2></div>
+                <div class="listing_select">
+                    <select id="metric">
+                        <option value="0.01">0.01</option>
+                        <option value="0.05">0.05</option>
+                        <option value="0.1" selected>0.1</option>
+                        <option value="0.2">0.2</option>
+                        <option value="0.5">0.5</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="5">5</option>
+                    </select>
+                    <svg class="listing_select bar_locate" id="listingchart">
+                    </svg>
+                    <div style="position: absolute; bottom: 5px; margin-left: 300px;">
+                      <h3>Price (ETH)</h3>
+                    </div>
+                </div>
+                
+                <!-- <svg id="bar"></svg> -->
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- chart end -->
+</body>
+<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+<script>
+    var headerTabArray = $("#headerTab a"),headTabLine = $("#headerTab .tabLine"),tabIndex,headerTabArrayLength = headerTabArray.length,headerTabWidthArray = [],headerTabPositonArray = [],defaultNum = 0;
+    for(var i=0;i<headerTabArrayLength;i  ){
+        headerTabWidthArray[i] = headerTabArray.eq(i).width()   10;
+        headerTabPositonArray[i] = headerTabArray.eq(i).position().left  10;  
+    }
+    headerTabArray.mouseover(function(){
+        $("#headerTab i:animated").stop();
+        tabIndex = $(this).index();
+        headTabLine.animate({width:headerTabWidthArray[tabIndex],left:headerTabPositonArray[tabIndex]},300);
+    })
+    headerTabArray.mouseout(function(){
+        $("#headerTab i:animated").stop();
+        tabIndex = $(this).index();
+        headTabLine.animate({width:headerTabWidthArray[defaultNum],left:headerTabPositonArray[defaultNum]},300);
+    })
+    defaultNum = 0;
+    headTabLine.animate({width:headerTabWidthArray[defaultNum],left:headerTabPositonArray[defaultNum]},300);
+</script>
+
+<!-- 以下為左側主表格區塊 -->
+<script>
+
+    // set the dimensions and margins of the graph
+    const margin = { top: 30, right: 10, bottom: 210, left: 100 },
+        width = 6000 - margin.left - margin.right,
+        height = 900 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    var svg = d3.select("#my_dataviz")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Parse the Data
+    d3.csv("data/new_top150.csv").then(function (data) {
+
+        // X axis
+        const x = d3.scaleBand()
+            .range([0, width])
+            .domain(data.map(d => d.NFT))
+            .padding(0.2);
+        svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x))
+            .selectAll("text")
+            .attr("transform", "translate(-10,0)rotate(-55)")
+            .style("text-anchor", "end")
+            .style("font", "13px serif")
+            .style("font-weight", "600")
+            .style("color", "white");
+
+        // Add Y axis
+        const y = d3.scaleLinear()
+            .domain([0, 100])
+            .range([height, 0]);
+        svg.append("g")
+            .call(d3.axisLeft(y))
+            .style("color", "white");
+
+      // Y axis label:
+      svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left + 50)
+        .attr("x", -margin.top + 30)
+        .text("Percentage")
+        .style("fill", "white")
+
+        // // Add a clipPath: everything out of this area won't be drawn.
+        // var clip = Svg.append("defs").append("svg:clipPath")
+        //     .attr("id", "clip")
+        //     .append("svg:rect")
+        //     .attr("width", width)
+        //     .attr("height", height)
+        //     .attr("x", 0)
+        //     .attr("y", 0);
+
+        // 抓取bar的NFT項目名稱
+        const mouseclick = function (event, d) {
+          d3.select('#floorpricechartsvg').selectAll("*").remove();
+          d3.select('#listingchart').selectAll("*").remove();
+          d3.selectAll("rect").style("fill", "#38585c")
+          d3.select(this).style("fill", "#C6FEF2")
+          var nftname = d.NFT
+          console.log(nftname)
+          find_nft_contract_by_name(nftname)
+        }
+
+        // Bars
+        svg.selectAll("mybar")
+            .data(data)
+            .join("rect")
+            .attr("x", d => x(d.NFT))
+            .attr("y", d => y(d.Percentage))
+            .attr("width", x.bandwidth())
+            .attr("height", d => height - y(d.Percentage))
+            // .attr("stroke", "#1594A2")
+            .attr("fill", "#ABEFF1")
+            // .attr('stroke-width', 3)
+            .on("click", mouseclick)
+
+        //圖表標題
+        svg
+            .selectAll("myLegend1")
+            .data(data)
+            .enter()
+            .append('g')
+            .append("text")
+          .attr('x', 635)
+            .attr('y', 20)
+            .text("Next Blue Chip Probability")
+            .style("fill", "#C6FEF2")
+            .style("font-size", 35)
+        
+        // const mousemove = function (event, d, i) {
+        //     grp = d.key
+        //     Tooltip.text(grp)
+        // }
+        // const mouseleave = function (event, d) {
+        //     Tooltip.style("opacity", 0)
+        //     d3.selectAll(".myArea").style("opacity", 1).style("stroke", "none")
+        //     d3.selectAll("rect").style("opacity", 1).style("stroke", "none")
+        // }
+
+        
+    })
+</script>
+
+<script>
+  
+    const getListing = async (address) => {
+      try {
+        
+        const response = await axios.post('http://localhost:3001/api/listingCount', {
+          address
+        });
+        return response
+  
+      } catch (error) {
+        console.log(error)
+      }
+  
+    }
+  
+  
+    // set the dimensions and margins of the graph
+    
+  
+  
+    // get the data
+    async function startlisting(address) {
+  
+      const response = await getListing(address);
+      const price = response.data.price
+      
+      const data = price.sort(function(a,b) {
+        return (+a) - (+b)
+      })
+      
+      
+      const margin = {
+        top: 10,
+        right: 30,
+        bottom: 30,
+        left: 40
+      },
+      width = 650 - margin.left - margin.right,
+      height = 330 - margin.top - margin.bottom;
+  
+    // append the svg object to the body of the page
+      const svg2 = d3.select("#listingchart")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          `translate(${margin.left},${margin.top})`)
+          
+      // X axis: scale and draw:
+      const x = d3.scaleLinear()
+            .domain([d3.min(data,function(d){ return +d}), d3.max(data,function(d){ return +d})]) 
+            // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+            .range([0, width]);
+            svg2.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x))
+            .style("color", "white");
+  
+          // svg.append("text")
+          //   .attr("text-anchor", "end")
+          //   .attr("x",width/2 +30)
+          //   .attr("y",height + 40)
+          //   .attr("font-family","sans-serif")
+          //   .attr("color","white")
+          //   .text("Price(ETH)")
+  
+          // Y axis: initialization
+          const y = d3.scaleLinear()
+            .range([height, 0]);
+          const yAxis = svg2.append("g").style("color", "white");
+  
+          // A function that builds the graph for a specific value of bin
+          function update(nBin) {
+  
+            // set the parameters for the histogram
+            const histogram = d3.histogram()
+              .value(function (d) {
+                return d;
+              }) // I need to give the vector of value
+              .domain(x.domain()) // then the domain of the graphic
+              .thresholds(x.ticks(nBin)); // then the numbers of bins
+  
+            // And apply this function to data to get the bins
+            const bins = histogram(data);
+  
+            // Y axis: update now that we know the domain
+            y.domain([0, d3.max(bins, function (d) {
+              
+              return d.length;
+            })]); // d3.hist has to be called before the Y axis obviously
+            yAxis
+              .transition()
+              .duration(1000)
+              .call(d3.axisLeft(y));
+            
+            
+            const tooltip = d3.select("#bar")
+                .append("div")
+                .style("opacity", 0)
+                .attr("class", "tooltip")
+                .style("background-color", "black")
+                .style("color", "white")
+                .style("border-radius", "5px")
+                .style("padding", "10px")
+                .style("position", "absolute")
+  
+            const showTooltip = function(event,d) {
+              
+              tooltip
+                .transition()
+                .duration(100)
+                .style("opacity", 1)
+              tooltip
+                .html("Range: " + d.x0 + " - " + d.x1 + "<br> Count:" + d.length)
+                .style("left", (event.x) + "px")
+                .style("top", (event.y) + "px")
+            }
+            const moveTooltip = function(event,d) {
+              
+              tooltip
+              .style("left", (event.x) + "px")
+              .style("top", (event.y) + "px")
+            }
+    // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+            const hideTooltip = function(event,d) {
+              tooltip
+                .transition()
+                .duration(100)
+                .style("opacity", 0)
+            }
+            // Join the rect with the bins data
+            const u = svg2.selectAll("rect")
+              .data(bins)
+  
+            // Manage the existing bars and eventually the new ones:
+            u
+              .join("rect")
+               // Add a new rect for each new elements
+              .on("mouseover", showTooltip )
+              .on("mousemove", moveTooltip )
+              .on("mouseleave", hideTooltip )
+              .transition() // and apply changes to all of them
+              .duration(1000)
+              .attr("x", 1)
+              .attr("transform", function (d) {
+                return `translate(${x(d.x0)}, ${y(d.length)})`
+              })
+              .attr("width", function (d) {
+                return x(d.x1) - x(d.x0) - 1;
+              })
+              .attr("height", function (d) {
+                return height - y(d.length);
+              })
+              .style("fill", "#F3FEE1")
+              // Show tooltip on hover
+              
+  
+          }
+  
+  
+          // Initialize with 20 bins
+          const min = d3.min(data,function(d){ return Number(+d)})
+          const max = d3.max(data,function(d){ return Number(+d)})
+          const prev_bins = Math.floor( ((max - min) / 0.1))
+          update(prev_bins)
+  
+  
+          // Listen to the button -> update if user change it
+          // d3.select("#nBin").on("input", function () {
+          //   update(+this.value);
+          // });
+  
+          d3.select('#metric')
+            .on('change', function (e) {
+              const num_bins = Math.floor( (max - min) / (+this.value))
+              e.preventDefault()
+              update(num_bins)
+             
+      })
+    }
+  </script>
+</html>
